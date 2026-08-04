@@ -1,67 +1,125 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
-    return (
-        <footer className="bg-[#2D2A26] text-white">
+  return (
+    <footer className="bg-stone-900 text-gray-300 mt-16">
+      <div className="max-w-7xl mx-auto px-6 py-12 grid gap-10 md:grid-cols-4">
 
-            <div className="max-w-7xl mx-auto px-6 lg:px-10 py-14 grid md:grid-cols-4 gap-10">
+        <div>
+          <Link
+            to="/"
+            className="flex items-center gap-3 text-2xl font-bold text-white"
+          >
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-600 text-white">
+              B
+            </span>
+            BookVerse
+          </Link>
 
-                <div>
+          <p className="mt-4 text-sm leading-6 text-gray-400">
+            Discover timeless stories, inspiring authors, and carefully
+            selected books chosen for every reader.
+          </p>
 
-                    <h2 className="text-3xl font-serif text-orange-400 mb-4">
-                        BookVerse
-                    </h2>
+          <div className="mt-6 flex gap-4">
+            <a
+              href="#"
+              className="hover:text-amber-400 transition"
+            >
+              Facebook
+            </a>
 
-                    <p className="text-stone-300">
-                        Discover amazing books and enjoy reading with BookVerse.
-                    </p>
+            <a
+              href="#"
+              className="hover:text-amber-400 transition"
+            >
+              Instagram
+            </a>
 
-                </div>
+            <a
+              href="#"
+              className="hover:text-amber-400 transition"
+            >
+              Twitter
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 className="text-lg font-semibold text-white mb-4">
+            Shop
+          </h4>
 
-                <div>
+          <div className="flex flex-col gap-3">
+            <Link to="/books" className="hover:text-amber-400 transition">
+              All Books
+            </Link>
 
-                    <h3 className="font-semibold mb-4">Quick Links</h3>
+            <Link to="/cart" className="hover:text-amber-400 transition">
+              Shopping Cart
+            </Link>
 
-                    <ul className="space-y-2 text-stone-300">
-                        <li>Home</li>
-                        <li>Books</li>
-                        <li>About</li>
+            <Link to="/checkout" className="hover:text-amber-400 transition">
+              Checkout
+            </Link>
+          </div>
+        </div>
+        <div>
+          <h4 className="text-lg font-semibold text-white mb-4">
+            Company
+          </h4>
 
-                    </ul>
+          <div className="flex flex-col gap-3">
+            <Link to="/about" className="hover:text-amber-400 transition">
+              About Us
+            </Link>
 
-                </div>
+            <a
+              href="mailto:hello@bookverse.example"
+              className="hover:text-amber-400 transition"
+            >
+              Contact
+            </a>
 
-                <div>
+            <a href="#" className="hover:text-amber-400 transition">
+              Privacy Policy
+            </a>
 
-                    <h3 className="font-semibold mb-4">Categories</h3>
+            <a href="#" className="hover:text-amber-400 transition">
+              Terms & Conditions
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 className="text-lg font-semibold text-white mb-4">
+            Account
+          </h4>
 
-                    <ul className="space-y-2 text-stone-300">
-                        <li>Fiction</li>
-                        <li>Business</li>
-                        <li>Romance</li>
-                        <li>Fantasy</li>
-                    </ul>
+          <div className="flex flex-col gap-3">
+            <Link to="/login" className="hover:text-amber-400 transition">
+              Sign In
+            </Link>
 
-                </div>
+            <Link to="/register" className="hover:text-amber-400 transition">
+              Create Account
+            </Link>
 
-                <div>
+            <Link to="/cart" className="hover:text-amber-400 transition">
+              My Cart
+            </Link>
+          </div>
+        </div>
+      </div>
+      <div className="border-t border-stone-700">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between text-sm text-gray-400">
+          <span>
+            © {new Date().getFullYear()} BookVerse. All rights reserved.
+          </span>
 
-                    <h3 className="font-semibold mb-4">
-                        Stay Connected
-                    </h3>
-
-                    <p className="text-stone-300">
-                        Follow BookVerse for the latest book recommendations and updates.
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div className="border-t border-stone-700 py-5 text-center text-stone-400">
-                © 2026 BookVerse. All Rights Reserved.
-            </div>
-
-        </footer>
-    );
+          <span className="mt-2 md:mt-0">
+            Made with ❤️ for book lovers
+          </span>
+        </div>
+      </div>
+    </footer>
+  );
 }

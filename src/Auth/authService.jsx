@@ -1,34 +1,51 @@
-import {
-  signInWithEmailAndPassword,
+import { createContext, useContext } from "react";
+import { 
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile
 } from "firebase/auth";
 
-import { auth } from "../firebase/firebase";
+import { auth } from "../firebase/firebase.jsx";
 
-export async function login({ email, password }) {
-  try {
-    const userCredential = await signInWithEmailAndPassword(
+
+const AuthContext = createContext();
+
+export function AuthProvider({ children }) {
+
+  async function register({ email, password, name }) {
+
+    const result = await createUserWithEmailAndPassword(
       auth,
       email,
       password
     );
 
-    return userCredential.user;
-  } catch (error) {
-    throw new Error(error.message);
+    const user = result.user;
+
+    await updateProfile(user, {
+      displayName: name
+    });
+
+    return user;
   }
+  async function login({ email, password }) {
+
+    const result = await signInWithEmailAndPassword(
+      auth,
+      email.trim(),
+      password
+    );
+
+    console.log("UID:", result.user.uid);
+
+    return result.user;
+  }
+  return (
+    <AuthContext.Provider value={{ register, login }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
-
-export async function register({ email, password }) {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-
-    return userCredential.user;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+export function useAuth() {
+  return useContext(AuthContext);
 }

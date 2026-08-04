@@ -1,49 +1,99 @@
-import React from "react";
-import {Search, User, Heart, Menu} from "lucide-react";
-import {Link} from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useCart } from "../context/CartContext.jsx";
+import { useAuth } from "../Auth/AuthService.jsx";
 
-export default function Navbar() {
-    return (
-        <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-stone-200">
-            <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+export default function NavBar() {
+  const { count } = useCart();
+  const { isAuthenticated, user, logout } = useAuth();
 
-                <div>
-                    <h1 className="text-2xl font-serif font-bold text-orange-500">
-                        BookVerse
-                    </h1>
-                    <p className="text-xs text-stone-500">
-                        Find your next favorite book
-                    </p>
-                </div>
+  const navClass = ({ isActive }) =>
+    `px-3 py-2 rounded-md transition ${
+      isActive
+        ? "text-amber-700 font-semibold"
+        : "text-gray-600 hover:text-amber-700"
+    }`;
 
-                <nav className="hidden lg:flex items-center gap-8 font-medium text-stone-700">
-                    <a href="/" className="hover:text-orange-500">Home</a>
-                    <a href="/books" className="hover:text-orange-500">Books</a>
-                    <a href="/about" className="hover:text-orange-500">About</a>
+  return (
+    <header className="bg-white shadow-md sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex items-center justify-between h-16">
 
-                </nav>
+      
+          <NavLink
+            to="/"
+            className="flex items-center gap-2 text-2xl font-bold text-amber-700"
+          >
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-700 text-white">
+              B
+            </span>
+            BookVerse
+          </NavLink>
 
-                <div className="hidden md:flex items-center bg-stone-100 rounded-full px-4 py-2 w-72">
-                    <Search size={18}/>
-                    <input
-                        placeholder="Search books..."
-                        className="bg-transparent ml-2 w-full outline-none text-sm"
-                    />
-                </div>
+      
+          <nav className="hidden md:flex items-center gap-6">
+            <NavLink to="/" end className={navClass}>
+              Home
+            </NavLink>
 
-                <div className="hidden lg:flex items-center gap-4">
-                    <User className="cursor-pointer hover:text-orange-500"/>
+            <NavLink to="/books" className={navClass}>
+              Books
+            </NavLink>
 
-                    <Link
-                        to="/login"
-                        className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full transition"
-                    >
-                        Login
-                    </Link>
-                </div>
+            <NavLink to="/about" className={navClass}>
+              About
+            </NavLink>
+          </nav>
 
-                <Menu className="lg:hidden"/>
-            </div>
-        </header>
-    );
+    
+          <div className="flex items-center gap-5">
+
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <span className="text-gray-700">
+                  Hi, <span className="font-semibold">{user.name.split(" ")[0]}</span>
+                </span>
+
+                <button
+                  onClick={logout}
+                  className="text-red-500 hover:text-red-700 font-medium"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <NavLink
+                to="/login"
+                className="rounded-lg bg-amber-700 px-4 py-2 text-white hover:bg-amber-800 transition"
+              >
+                Sign In
+              </NavLink>
+            )}
+            <NavLink
+              to="/cart"
+              className="relative text-gray-700 hover:text-amber-700 transition"
+            >
+              <svg
+                className="h-7 w-7"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="9" cy="21" r="1.5" fill="currentColor" stroke="none" />
+                <circle cx="19" cy="21" r="1.5" fill="currentColor" stroke="none" />
+                <path d="M2 3h2l2.6 12.2a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 2-1.6L21 7H6" />
+              </svg>
+
+              {count > 0 && (
+                <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                  {count}
+                </span>
+              )}
+            </NavLink>
+
+          </div>
+        </div>
+      </div>
+    </header>
+  );
 }

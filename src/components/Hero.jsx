@@ -1,65 +1,59 @@
-import React from "react";
-import {ArrowRight} from "lucide-react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Hero() {
-    return (
-        <section className="bg-[#FAF7F1]">
-            <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20">
+  return (
+    <section className="bg-amber-50">
+      <div className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 items-center gap-12">
+        <div>
+          <span className="inline-block bg-amber-100 text-amber-700 text-sm font-semibold px-4 py-2 rounded-full mb-6">
+            Independent Online Bookstore
+          </span>
 
-                <div className="grid lg:grid-cols-2 gap-14 items-center">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight">
+            Books worth
+            <br />
+            clearing a shelf for.
+          </h1>
 
-                    <div>
+          <p className="mt-6 text-lg text-gray-600 leading-8">
+            Discover carefully selected fiction, poetry, and essays
+            from writers around the world.
+          </p>
 
-            <span className="bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm">
-              Welcome to BookVerse
-            </span>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link
+              to="/books"
+              className="rounded-lg bg-amber-700 px-6 py-3 font-semibold text-white shadow hover:bg-amber-800 transition"
+            >
+              Browse the Shop
+            </Link>
 
-                        <h1 className="text-6xl font-serif font-bold leading-tight mt-6">
-                            Discover Books
-                            <br/>
-                            That
-                            <span className="text-orange-500">
-                {" "}Inspire You
-              </span>
-                        </h1>
+            <Link
+              to="/about"
+              className="rounded-lg border-2 border-amber-700 px-6 py-3 font-semibold text-amber-700 hover:bg-amber-700 hover:text-white transition"
+            >
+              Our Story
+            </Link>
+          </div>
+        </div>
+        <div className="relative flex justify-center">
+          <img
+            src="https://i.pinimg.com/736x/90/2b/99/902b99f2d416142988afbd25ef0da95d.jpg"
+            alt="Books collection"
+            className="rounded-3xl shadow-2xl w-full max-w-md object-cover"
+          />
+          <div className="absolute bottom-6 left-6 bg-white rounded-xl shadow-lg px-6 py-4">
+            <p className="text-3xl font-bold text-amber-700">
+              10,000+
+            </p>
 
-                        <p className="mt-6 text-stone-600 leading-8">
-                            Explore thousands of books from your favorite authors.
-                            Discover inspiring stories, timeless classics, educational
-                            books, and best sellers all in one place.
-                        </p>
+            <p className="text-gray-600">
+              Books Available
+            </p>
+          </div>
+        </div>
 
-                        <div className="flex gap-4 mt-8">
-
-                            <button
-                                className="bg-orange-500 hover:bg-orange-600 text-white px-7 py-3 rounded-full flex items-center gap-2">
-                                Explore Books
-                                <ArrowRight size={18}/>
-                            </button>
-
-                            <button
-                                className="border border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white px-7 py-3 rounded-full">
-                                Learn More
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                    <div className="flex justify-center">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=700"
-                            alt="Books"
-                            className="rounded-3xl shadow-2xl max-w-md"
-                        />
-
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
-    );
+      </div>
+    </section>
+  );
 }
