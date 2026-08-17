@@ -4,7 +4,6 @@ import { HashRouter } from 'react-router-dom'
 import App from './App.jsx'
 import { AuthProvider } from './Auth/AuthService.jsx'
 import { CartProvider } from './context/CartContext.jsx'
-import "tailwindcss";
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
