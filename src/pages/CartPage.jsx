@@ -65,10 +65,14 @@ export default function CartPage() {
                     gap-5
                   "
                 >
-                  <div
-                    className="w-16 h-24 rounded-lg shrink-0"
-                    style={{ background: item.spine }}
-                  />
+                
+                    <div className="w-16 h-24 rounded-lg shrink-0 overflow-hidden bg-gray-100">
+  <img
+    src={item.image}
+    alt={item.title}
+    className="w-full h-full object-cover"
+  />
+</div>
                   <div className="flex-1">
 
                     <Link

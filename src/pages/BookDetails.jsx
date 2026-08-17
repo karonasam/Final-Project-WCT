@@ -1,213 +1,122 @@
-import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import books from "../data/books.js";
-import { useCart } from "../context/CartContext.jsx";
+import React, { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { Link, useParams } from "react-router-dom";
+import { db } from "../firebase/firebase";
 
 export default function BookDetails() {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const { addItem } = useCart();
 
-  const [qty, setQty] = useState(1);
-  const [added, setAdded] = useState(false);
+  const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const book = books.find((b) => b.id === id);
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const bookRef = doc(db, "books", id);
+        const snapshot = await getDoc(bookRef);
 
+        if (snapshot.exists()) {
+          setBook({
+            id: snapshot.id,
+            ...snapshot.data(),
+          });
+        }
+      } catch (error) {
+        console.error("Error loading book:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!book) {
+    fetchBook();
+  }, [id]);
+
+  if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-6 py-16">
-
-        <h1 className="text-4xl font-bold text-gray-900 mb-3">
-          Book not found
-        </h1>
-
-        <p className="text-gray-600 mb-6">
-          We couldn't find that title.
-        </p>
-
-        <Link
-          to="/books"
-          className="
-            inline-block
-            border
-            border-gray-800
-            px-6
-            py-3
-            rounded-lg
-            hover:bg-gray-900
-            hover:text-white
-            transition
-          "
-        >
-          Back to shop
-        </Link>
-
+      <div className="flex min-h-screen items-center justify-center">
+        <p>Loading book...</p>
       </div>
     );
   }
 
-  function handleAddToCart() {
-    addItem(book, qty);
-    setAdded(true);
+  if (!book) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center">
+        <h1 className="text-2xl font-bold">
+          Book not found
+        </h1>
 
-    setTimeout(() => {
-      setAdded(false);
-    }, 1800);
+        <Link
+          to="/books"
+          className="mt-5 rounded-full bg-[#3f2a1d] px-6 py-3 text-white"
+        >
+          Back to Books
+        </Link>
+      </div>
+    );
   }
-  function handleBuyNow() {
-    addItem(book, qty);
-    navigate("/checkout");
-  }
+
   return (
-    <section className="bg-[#f8f5ef] min-h-screen py-16">
+    <div className="min-h-screen bg-[#f8f0e4] px-6 py-32">
+      <div className="mx-auto max-w-6xl">
 
-      <div className="max-w-7xl mx-auto px-6">
+        <Link
+          to="/books"
+          className="mb-8 inline-block font-bold text-[#a56519]"
+        >
+          ← Back to Books
+        </Link>
 
-        <div className="grid md:grid-cols-2 gap-12 items-start">
-          <div className="rounded-2xl overflow-hidden shadow-xl bg-white">
+        <div className="grid gap-12 rounded-[35px] bg-[#fffaf3] p-8 shadow-xl md:grid-cols-2">
 
+          {/* IMAGE */}
+          <div className="flex items-center justify-center rounded-[28px] bg-[#f2e4d0] p-10">
             <img
-              src={book.image}
+              src={book.imageUrl || FALLBACK_IMAGE}
               alt={book.title}
-              className="
-                w-full
-                h-[600px]
-                object-cover
-              "
+              className="h-[450px] w-[300px] rounded-lg object-cover shadow-2xl"
             />
-
           </div>
-          <div>
-            <span className="
-              text-sm
-              uppercase
-              tracking-widest
-              text-yellow-700
-              font-semibold
-            ">
-              {book.genre}
-            </span>
-            <h1 className="
-              text-5xl
-              font-serif
-              font-bold
-              text-gray-900
-              mt-4
-              mb-3
-            ">
+
+          {/* DETAILS */}
+          <div className="flex flex-col justify-center">
+
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#b87318]">
+              {book.category || "Book"}
+            </p>
+
+            <h1 className="mt-3 text-4xl font-black text-[#30281f] md:text-5xl">
               {book.title}
             </h1>
-            <p className="text-lg text-gray-600 mb-4">
-              by {book.author}
+
+            <p className="mt-4 text-lg text-[#887967]">
+              by {book.author || "Unknown Author"}
             </p>
-            <p className="text-gray-700 mb-6">
-              ⭐ {book.rating.toFixed(1)}
-              <span className="mx-2">
-                ·
-              </span>
-              {book.pages} pages
+
+            <div className="my-7 h-px bg-[#e5d9c8]" />
+
+            <p className="leading-7 text-[#6f604f]">
+              Discover more about this book and explore
+              its story, author, and details.
             </p>
-            <p className="
-              text-gray-600
-              leading-relaxed
-              text-lg
-              mb-8
-            ">
-              {book.blurb}
-            </p>
-            <div className="
-              text-3xl
-              font-bold
-              text-yellow-700
-              mb-8
-            ">
-              ${book.price.toFixed(2)}
-            </div>
-            <div className="flex flex-wrap items-center gap-4">
 
-              <div className="
-                flex
-                items-center
-                border
-                rounded-lg
-                overflow-hidden
-                bg-white
-              ">
-                <button
-                  onClick={() =>
-                    setQty((q) => Math.max(1, q - 1))
-                  }
-                  className="
-                    px-4
-                    py-2
-                    hover:bg-gray-100
-                    text-xl
-                  "
-                >
-                  −
-                </button>
-                <span className="px-5 font-semibold">
-                  {qty}
-                </span>
-                <button
-                  onClick={() =>
-                    setQty((q) => q + 1)
-                  }
-                  className="
-                    px-4
-                    py-2
-                    hover:bg-gray-100
-                    text-xl
-                  "
-                >
-                  +
-                </button>
-              </div>
-              <button
-                onClick={handleAddToCart}
-                className="
-                  px-6
-                  py-3
-                  border
-                  border-gray-800
-                  rounded-lg
-                  hover:bg-gray-900
-                  hover:text-white
-                  transition
-                "
-              >
-                {added ? "Added ✓" : "Add to cart"}
-              </button>
-              <button
-                onClick={handleBuyNow}
-                className="
-                  px-6
-                  py-3
-                  bg-yellow-700
-                  text-white
-                  rounded-lg
-                  hover:bg-yellow-800
-                  transition
-                "
-              >
-                Buy now
-              </button>
+            <div className="mt-8">
+              <p className="text-xs font-bold uppercase text-[#a99a89]">
+                Price
+              </p>
 
-
-
+              <p className="mt-1 text-3xl font-black text-[#a56519]">
+                ${Number(book.price || 0).toFixed(2)}
+              </p>
             </div>
 
+            <button className="mt-8 rounded-full bg-[#3f2a1d] px-6 py-4 font-bold text-white transition hover:bg-[#5b3d27]">
+              Add to Cart
+            </button>
 
           </div>
-
-
         </div>
-
-
       </div>
-
-
-    </section>
+    </div>
   );
 }

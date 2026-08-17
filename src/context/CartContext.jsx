@@ -17,20 +17,35 @@ export function CartProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
   }, [items])
 
-  function addItem(book, qty = 1) {
-    setItems((prev) => {
-      const existing = prev.find((i) => i.id === book.id)
-      if (existing) {
-        return prev.map((i) =>
-          i.id === book.id ? { ...i, qty: i.qty + qty } : i,
-        )
-      }
-      return [
-        ...prev,
-        { id: book.id, title: book.title, author: book.author, price: book.price, spine: book.spine, qty },
-      ]
-    })
-  }
+function addItem(book, qty = 1) {
+  setItems((prev) => {
+    const existing = prev.find((i) => i.id === book.id);
+
+    if (existing) {
+      return prev.map((i) =>
+        i.id === book.id
+          ? { ...i, qty: i.qty + qty }
+          : i
+      );
+    }
+
+    return [
+      ...prev,
+      {
+        id: book.id,
+        title: book.title,
+        author: book.author,
+        price: Number(book.price || 0),
+
+        // Keep the Firestore image URL
+        imageUrl: book.imageUrl || book.image || "",
+
+        spine: book.spine,
+        qty,
+      },
+    ];
+  });
+}
 
   function removeItem(id) {
     setItems((prev) => prev.filter((i) => i.id !== id))

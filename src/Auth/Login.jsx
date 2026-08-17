@@ -28,13 +28,12 @@ export default function Login() {
 
     try {
 
-      // Login with Firebase Auth
+
+    
       const user = await login(form);
 
       console.log("Logged in UID:", user.uid);
 
-
-      // Check admin in Firestore
       const adminRef = doc(db, "admins", user.uid);
 
       const adminSnap = await getDoc(adminRef);
